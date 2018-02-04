@@ -41,13 +41,37 @@ class UserProfileManager(BaseUserManager):
         # we save the changes to database
         user.save(using=self.db)
 
-class ProfileFeedItem(models.Model):
-    """Profile status update"""
-    #creating related model's fields."""
-    user_profile = models.ForeignKey('UserProfile',on_delete=models.CASCADE)
-    status_text = models.CharField(max_length=255)
-    created_on = models.DateTimeField(auto_now_add=True)
+class UserProfile(AbstractBaseUser,PermissionsMixin):
+    """The override for  user's model as we wish to have in this app"""
+    #login credentials for this system, username is user's email in our app
+    email = models.EmailField(max_length=255,unique=True)
+    #user's name
+    name = models.CharField(max_length=255)
+    # this is for test purpose and a user should not be active by default
+    is_active = models.BooleanField(default=True)
+    # Both fields, is_active and is_staff are part of django user model
+    # and we should override them.
+    # is_staff is for administrative reasons, and should be inactive by default
+    is_staff = models.BooleanField(default=False)
+
+    #object manager is a class for managing userprofiles, required for override
+
+    objects = UserProfileManager()
+
+    # what django model uses for authentication, override it with email
+    USERNAME_FIELD = 'email'
+    # list of fields for registration process, only name is applied here
+    REQUIRED_FIELDS = ['name']
+
+    # helper functions
+    def get_full_name(self):
+        """ To get a user's short name"""
+        return self.name
+
+    def  get_short_name(self):
+        """ This method is called after login so here we have to define it"""
+        return self.name
 
     def _str_(self):
         """convert object to string"""
-        return self.status_text
+        return self.name
