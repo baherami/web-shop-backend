@@ -11,5 +11,5 @@ router = DefaultRouter()
 router.register('profile', views.UserProfileViewSet)
 router.register('Login', views.LoginViewSet, base_name='login')
 urlpatterns = [
-    url(r'',include(router.urls))
+    url(r'',include(router.urls)),
 ]

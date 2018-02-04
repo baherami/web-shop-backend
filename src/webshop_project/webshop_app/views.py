@@ -36,6 +36,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes=(permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
+    
 class LoginViewSet(viewsets.ViewSet):
     """ Checks email and password of a user and return a token"""
 
