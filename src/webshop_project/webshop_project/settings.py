@@ -122,4 +122,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # add the new userprofile to the django model via this setting
-AUTH_USER_MODEL= 'profiles_api.UserProfile'
+AUTH_USER_MODEL= 'webshop_app.UserProfile'
