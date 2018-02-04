@@ -22,5 +22,5 @@ from django.conf.urls import include
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include('profiles_api.urls')),
+    url(r'^api/', include('webshop_app.urls')),
 ]
