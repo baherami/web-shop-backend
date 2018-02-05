@@ -72,23 +72,30 @@ class CartViewSet(viewsets.ModelViewSet):
     queryset = models.Cart.objects.all()
     items_queryset = models.Item.objects.all()
     permission_classes = (permissions.OwnCartChange,)
+
     def create(self, request):
         """ Sets the user profile to the logged in user"""
         serializer = serializers.CartSerializer(data = request.data)
 
         if serializer.is_valid() :
-            serializer.save(user_profile=self.request.user, total_sum = self.get_price())
+            this_cart=serializer.save(user_profile=self.request.user, total_sum = 0)
+            serializer.save(user_profile=self.request.user, total_sum = self.get_price(this_cart))
 
-            return Response({'Operation': 'Done'})
+            return Response({'Operation': 'Done','country':self.request.user.address_country, 'data':list(this_cart.items.values_list('id',flat=True))})
 
         else:
             return Response(
             serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-    def get_price(self):
+    def get_price(self,this_cart):
         price = 0
-        items_list = list(self.get_queryset().values_list('items', flat=True))
+        items_list = list(this_cart.items.values_list('id', flat=True))
         for i in items_list:
             item_in_db = self.items_queryset.filter(id=i).values_list('price', flat=True)[0]
             price = price + item_in_db
+        country_VAT = self.request.user.address_country
+        price =  price + price * (country_VAT)
+
+
+
         return price

@@ -1,13 +1,9 @@
 from django.db import models
-
 #Adding imorts for user models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-
 #user manager imports for user model
 from django.contrib.auth.models import BaseUserManager
-
-
 #
 
 
@@ -43,21 +39,23 @@ class UserProfileManager(BaseUserManager):
 
 class UserProfile(AbstractBaseUser,PermissionsMixin):
     """The override for  user's model as we wish to have in this app"""
+    country_choices=((0.12,'United States'),(0.14,'Europe'),(0.3,'Asia'))
     #login credentials for this system, username is user's email in our app
     email = models.EmailField(max_length=255,unique=True)
     #user's name
     name = models.CharField(max_length=255)
     #address for VAT calculations
-    address_country =models.CharField(max_length=2)
+
+    address_country = models.DecimalField(max_digits=2, decimal_places=2,
+    choices = country_choices, default = 0.5 )
+
     # this is for test purpose and a user should not be active by default
     is_active = models.BooleanField(default=True)
     # Both fields, is_active and is_staff are part of django user model
     # and we should override them.
     # is_staff is for administrative reasons, and should be inactive by default
     is_staff = models.BooleanField(default=False)
-
     #object manager is a class for managing userprofiles, required for override
-
     objects = UserProfileManager()
 
     # what django model uses for authentication, override it with email
@@ -110,6 +108,7 @@ class Cart(models.Model):
     total_sum = models.DecimalField(max_digits=10, decimal_places=2)
     created_on = models.DateTimeField(auto_now_add=True)
     is_payed = models.BooleanField(default=True)
+
     def _str_(self):
         """convert object to string"""
         return "A cart sample"
