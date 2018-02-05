@@ -11,6 +11,7 @@ router = DefaultRouter()
 router.register('profile', views.UserProfileViewSet)
 router.register('Login', views.LoginViewSet, base_name='login')
 router.register('Item',views.ItemViewSet, base_name='Item')
+router.register('Cart',views.CartViewSet, base_name='Cart')
 
 urlpatterns = [
     url(r'',include(router.urls)),

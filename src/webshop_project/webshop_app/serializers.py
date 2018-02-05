@@ -33,3 +33,10 @@ class ItemSerializer(serializers.ModelSerializer):
         model = models.Item
         fields = ('id', 'user_profile', 'name', 'price', 'created_on')
         extra_kwargs = {'user_profile':{'read_only': True}}
+class CartSerializer(serializers.ModelSerializer):
+    """ A serializer for cart"""
+
+    class Meta:
+        model = models.Cart
+        fields = ('id', 'items', 'total_sum', 'created_on', 'is_payed')
+        extra_kwargs = {'user_profile':{'read_only' : True},'total_sum':{'read_only' : True}}

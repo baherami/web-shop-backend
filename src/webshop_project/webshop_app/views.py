@@ -65,3 +65,30 @@ class ItemViewSet(viewsets.ModelViewSet):
         else:
             return Response(
             serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+class CartViewSet(viewsets.ModelViewSet):
+    """Handles CRUD for feed carts"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.CartSerializer
+    queryset = models.Cart.objects.all()
+    items_queryset = models.Item.objects.all()
+    permission_classes = (permissions.OwnCartChange,)
+    def create(self, request):
+        """ Sets the user profile to the logged in user"""
+        serializer = serializers.CartSerializer(data = request.data)
+
+        if serializer.is_valid() :
+            serializer.save(user_profile=self.request.user, total_sum = self.get_price())
+
+            return Response({'Operation': 'Done'})
+
+        else:
+            return Response(
+            serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+    def get_price(self):
+        price = 0
+        items_list = list(self.get_queryset().values_list('items', flat=True))
+        for i in items_list:
+            item_in_db = self.items_queryset.filter(id=i).values_list('price', flat=True)[0]
+            price = price + item_in_db
+        return price

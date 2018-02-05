@@ -47,6 +47,8 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(max_length=255,unique=True)
     #user's name
     name = models.CharField(max_length=255)
+    #address for VAT calculations
+    address_country =models.CharField(max_length=2)
     # this is for test purpose and a user should not be active by default
     is_active = models.BooleanField(default=True)
     # Both fields, is_active and is_staff are part of django user model
@@ -100,9 +102,14 @@ class Item(models.Model):
     def _str_(self):
         """convert object to string"""
         return self.name
-        
+
 class Cart(models.Model):
     """ Represent an order of an Item by a User, containing the VAT info"""
+    user_profile = models.ForeignKey('UserProfile',on_delete=models.CASCADE)
+    items = models.ManyToManyField(Item)
+    total_sum = models.DecimalField(max_digits=10, decimal_places=2)
+    created_on = models.DateTimeField(auto_now_add=True)
+    is_payed = models.BooleanField(default=True)
     def _str_(self):
         """convert object to string"""
-        return "String representation"
+        return "A cart sample"
