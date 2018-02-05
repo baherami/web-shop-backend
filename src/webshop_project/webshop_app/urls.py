@@ -10,6 +10,8 @@ from . import views
 router = DefaultRouter()
 router.register('profile', views.UserProfileViewSet)
 router.register('Login', views.LoginViewSet, base_name='login')
+router.register('Item',views.ItemViewSet, base_name='Item')
+
 urlpatterns = [
     url(r'',include(router.urls)),
 ]

@@ -24,7 +24,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.permissions import DjangoModelPermissions
 # Create your views here.
 class UserProfileViewSet(viewsets.ModelViewSet):
     """ Handles CRUD for profiles"""
@@ -36,7 +36,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes=(permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email',)
-    
+
 class LoginViewSet(viewsets.ViewSet):
     """ Checks email and password of a user and return a token"""
 
@@ -46,3 +46,22 @@ class LoginViewSet(viewsets.ViewSet):
         """ User the ObtainToken APIVIEW to validate a user"""
 
         return ObtainAuthToken().post(request)
+
+class ItemViewSet(viewsets.ModelViewSet):
+    """Handles CRUD for feed items"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ItemSerializer
+    queryset = models.Item.objects.all()
+    permission_classes = (permissions.OwnItemChange, DjangoModelPermissions,)
+
+    def create(self, request):
+        """ Sets the user profile to the logged in user"""
+        serializer = serializers.ItemSerializer(data = request.data)
+
+        if serializer.is_valid():
+            serializer.save(user_profile=self.request.user)
+            return Response({'Operation': 'Done'})
+
+        else:
+            return Response(
+            serializer.errors, status = status.HTTP_400_BAD_REQUEST)

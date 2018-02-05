@@ -75,3 +75,28 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
     def _str_(self):
         """convert object to string"""
         return self.name
+
+
+class Item(models.Model):
+    """ Represents an Item that is created by admins, on top of
+        the price of the item, depending on which country the order
+        comes from, a specific VAT will be added to the item's price. """
+    # the admin user who created this item
+    user_profile = models.ForeignKey('UserProfile',on_delete=models.CASCADE)
+    # item's name
+    name = models.CharField(max_length=100)
+    # price with two digits for cents, cosidering the shop to use certain-
+    # currencies, like euros, dollars or pounds.
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    # keeping track of the date that item is created
+    created_on = models.DateTimeField(auto_now_add=True)
+
+
+    # future implementations' fields:
+    # normal_price
+    # offer_price
+    # number_of_items_available
+    # producerID
+    def _str_(self):
+        """convert object to string"""
+        return self.name

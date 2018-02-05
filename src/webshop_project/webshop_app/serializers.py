@@ -26,3 +26,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+class ItemSerializer(serializers.ModelSerializer):
+    """A serializer for items"""
+
+    class Meta:
+        model = models.Item
+        fields = ('id', 'user_profile', 'name', 'price', 'created_on')
+        extra_kwargs = {'user_profile':{'read_only': True}}
