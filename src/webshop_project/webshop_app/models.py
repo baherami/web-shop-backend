@@ -100,3 +100,9 @@ class Item(models.Model):
     def _str_(self):
         """convert object to string"""
         return self.name
+        
+class Cart(models.Model):
+    """ Represent an order of an Item by a User, containing the VAT info"""
+    def _str_(self):
+        """convert object to string"""
+        return "String representation"
