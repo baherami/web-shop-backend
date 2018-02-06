@@ -113,4 +113,4 @@ class Cart(models.Model):
 
     def __str__(self):
         """convert object to string"""
-        return "A cart sample"
+        return self.user_profile.name + "'s shopping cart"
