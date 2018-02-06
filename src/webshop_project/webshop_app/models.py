@@ -99,7 +99,7 @@ class Item(models.Model):
     # offer_price
     # number_of_items_available
     # producerID
-    def _str_(self):
+    def __str__(self):
         """convert object to string"""
         return self.name
 
