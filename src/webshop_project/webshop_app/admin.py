@@ -7,3 +7,5 @@ from . import models
 
 #register the user profile model
 admin.site.register(models.UserProfile)
+admin.site.register(models.Item)
+admin.site.register(models.Cart)
