@@ -40,4 +40,5 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart
         fields = ('id', 'items', 'total_sum', 'created_on', 'is_payed')
-        extra_kwargs = {'user_profile':{'read_only' : True},'total_sum':{'read_only' : True}}
+        extra_kwargs = {'user_profile':{'read_only' : True},
+        'total_sum':{'read_only' : True}, 'is_payed':{'read_only': True}}

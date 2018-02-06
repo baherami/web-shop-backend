@@ -39,6 +39,8 @@ class UserProfileManager(BaseUserManager):
 
 class UserProfile(AbstractBaseUser,PermissionsMixin):
     """The override for  user's model as we wish to have in this app"""
+    # country choice shows the current VAT of the countries where the user is
+    # making order.
     country_choices=((0.12,'United States'),(0.14,'Europe'),(0.3,'Asia'))
     #login credentials for this system, username is user's email in our app
     email = models.EmailField(max_length=255,unique=True)
@@ -107,7 +109,7 @@ class Cart(models.Model):
     items = models.ManyToManyField(Item)
     total_sum = models.DecimalField(max_digits=10, decimal_places=2)
     created_on = models.DateTimeField(auto_now_add=True)
-    is_payed = models.BooleanField(default=True)
+    is_payed = models.BooleanField(default=False)
 
     def _str_(self):
         """convert object to string"""

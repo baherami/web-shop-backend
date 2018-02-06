@@ -79,9 +79,12 @@ class CartViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid() :
             this_cart=serializer.save(user_profile=self.request.user, total_sum = 0)
-            serializer.save(user_profile=self.request.user, total_sum = self.get_price(this_cart))
+            serializer.save(user_profile=self.request.user,
+             total_sum = self.get_price(this_cart))
 
-            return Response({'Operation': 'Done','country':self.request.user.address_country, 'data':list(this_cart.items.values_list('id',flat=True))})
+            return Response({'Operation': 'Done',
+            'country':self.request.user.address_country,
+             'data':list(this_cart.items.values_list('id',flat=True))})
 
         else:
             return Response(
@@ -91,7 +94,8 @@ class CartViewSet(viewsets.ModelViewSet):
         price = 0
         items_list = list(this_cart.items.values_list('id', flat=True))
         for i in items_list:
-            item_in_db = self.items_queryset.filter(id=i).values_list('price', flat=True)[0]
+            item_in_db = self.items_queryset.filter(id=i).values_list('price',
+             flat=True)[0]
             price = price + item_in_db
         country_VAT = self.request.user.address_country
         price =  price + price * (country_VAT)
