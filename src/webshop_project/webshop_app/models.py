@@ -74,7 +74,7 @@ class UserProfile(AbstractBaseUser,PermissionsMixin):
         """ This method is called after login so here we have to define it"""
         return self.name
 
-    def _str_(self):
+    def __str__(self):
         """convert object to string"""
         return self.name
 
@@ -111,6 +111,6 @@ class Cart(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     is_payed = models.BooleanField(default=False)
 
-    def _str_(self):
+    def __str__(self):
         """convert object to string"""
         return "A cart sample"
